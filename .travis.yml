@@ -1,0 +1,13 @@
+sudo: required
+dist: trusty
+before_install:
+- sudo apt-get update
+- sudo apt-get -y install texlive-full
+- sudo mkdir -p /usr/share/fonts/opentype/
+- sudo cp ./fonts/* /usr/share/fonts/opentype/
+- sudo mkfontscale
+- sudo mkfontdir
+- sudo fc-cache -fv
+script:
+- cd 习惯的力量
+- make
