@@ -25,5 +25,5 @@ install:
 - sudo $TEXBIN/tlmgr install elegantnote
 
 script:
-- cd 习惯的力量
 - make
+- ls
