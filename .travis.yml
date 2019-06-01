@@ -1,13 +1,29 @@
 sudo: required
-dist: trusty
+dist: xenial
+
 before_install:
-- sudo apt-get update
-- sudo apt-get -y install texlive-full
+- sudo apt-get update && sudo apt-get install ttf-mscorefonts-installer && sudo apt-get install fontconfig
 - sudo mkdir -p /usr/share/fonts/opentype/
 - sudo cp ./fonts/* /usr/share/fonts/opentype/
 - sudo mkfontscale
 - sudo mkfontdir
 - sudo fc-cache -fv
+
+install:
+- REMOTE="http://mirror.ctan.org/systems/texlive/tlnet"
+- INSTALL="/tmp/install-texlive"
+- mkdir -p $INSTALL
+- curl -sSL $REMOTE/install-tl-unx.tar.gz | tar -xzv -C $INSTALL --strip-components=1
+
+- sudo $INSTALL/install-tl -profile .tl.profile
+
+- VERSION=$($INSTALL/install-tl --version | grep 'version' | grep -o '[0-9]\{4\}')
+- PLATFORM=$($INSTALL/install-tl --print-platform)
+- TEXBIN="/usr/local/texlive/${VERSION}/bin/${PLATFORM}"
+- export "PATH=$TEXBIN:$PATH"
+
+- sudo $TEXBIN/tlmgr install elegantnote
+
 script:
 - cd 习惯的力量
 - make
